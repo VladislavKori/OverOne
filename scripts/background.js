@@ -11,13 +11,21 @@ var config = {
     }
 };
 
-chrome.proxy.settings.set(
-    {value: config, scope: 'regular'},
-    function() {
+chrome.proxy.settings.set({
+        value: config,
+        scope: 'regular'
+    },
+    function () {
         console.log("work")
     }
 );
 
 chrome.proxy.onProxyError.addListener(details => {
-    if (details.fatal) {console.log('error', details)}
+    if (details.fatal) {
+        chrome.proxy.settings.clear({},
+            function () {
+                console.log('chrome settings clear')
+            }
+        )
+    }
 })
