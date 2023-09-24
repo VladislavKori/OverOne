@@ -14,13 +14,13 @@ const fetchProxyList = async () => {
     return result;
 }
 
-const generateConfig = async () => {
-    const list = (await fetchProxyList()).proxys;
+const generateConfig = async (list) => {
+    console.log(list)
     const rNum = random(0, list.length - 1);
     const connection = list[rNum];
 
-    const host = connection.ip;
-    const scheme = connection.protocols[0];
+    const host = connection.host;
+    const scheme = connection.schema[0];
     const port = Number(connection.port);
 
     var config = {
@@ -32,6 +32,9 @@ const generateConfig = async () => {
                 port: port,
             },
             bypassList: [
+                "https://www.youtube.com",
+                "https://rr3---sn-ab5sznze.googlevideo.com/*",
+                "https://i.ytimg.com"
                 // "*.radiorecord.ru", // work pattern
                 // "*.youtube.com"
             ]
@@ -40,8 +43,13 @@ const generateConfig = async () => {
     return config;
 }
 
-const connect = async () => {
-    const config = await generateConfig()
+const connect = async (type, data) => {
+    let list;
+    if (type === "simple") list = (await fetchProxyList()).proxys;
+    if (type === "fast") list = [data];
+    if (type === "json") list = data.proxys;
+
+    const config = await generateConfig(list)
     chrome.proxy.settings.set({
             value: config,
             scope: 'regular'
@@ -75,14 +83,28 @@ const disconnect = () => {
     })
 }
 
+const saveInStorage = (key, value) => {
+    chrome.storage.local.set({
+        key: value
+    }).then(() => {
+        console.log("Value is set");
+    });
+}
+
+const getFromStorage = (key, value) => {
+    chrome.storage.local.get(["key"]).then((result) => {
+        console.log("Value currently is " + result.key);
+    });
+}
+
 chrome.runtime.onConnect.addListener(function (port) {
-    
+
     // handlers 
     port.onMessage.addListener(async function (msg) {
-        
+
         // connect handler
         if (msg.command === "connect") {
-            await connect();
+            await connect("simple");
             const info = await getSettings();
 
             port.postMessage({
@@ -114,8 +136,35 @@ chrome.runtime.onConnect.addListener(function (port) {
 
         // fc-connect 
         if (msg.command === "fc-connect") {
-            console.log(msg)
-            // connection config 
+            await connect("fast", msg.connectionConfig);
+            const info = await getSettings();
+
+            port.postMessage({
+                command: "state",
+                status: status["CONNECTED"],
+                connection: {
+                    host: info.host,
+                    port: info.port,
+                    scheme: info.scheme
+                }
+            });
+        }
+
+        // json-connect
+        if (msg.command === "json-connect") {
+            await connect("json", msg.data);
+            const info = await getSettings();
+            saveInStorage();
+
+            port.postMessage({
+                command: "state",
+                status: status["CONNECTED"],
+                connection: {
+                    host: info.host,
+                    port: info.port,
+                    scheme: info.scheme
+                }
+            });
         }
 
         // get status handler

@@ -14,7 +14,7 @@ const fastConnectionScreen = document.querySelector('#screen2');
 const JSONConnectionScreen = document.querySelector('#screen3');
 
 // info elements
-// const mode = document.querySelector('#type-connect');
+const modeElement = document.querySelector('#type-connect');
 const host = document.querySelector('#host');
 const port = document.querySelector('#port');
 const schema = document.querySelector('#schema');
@@ -27,10 +27,19 @@ const fcPort = document.querySelector('#fc-port');
 const fcSchema = document.querySelector('#fc-schema');
 const fcConnect = document.querySelector('#fc-connect');
 
+// json connection 
+const jsonInputField = document.querySelector('#json-file');
+
 // screens
 const screens = [homeScreen, fastConnectionScreen, JSONConnectionScreen];
 
 // satates
+const connectionModes = {
+    "SIMPLE": "Simple Connection",
+    "FAST": "Fast Connection",
+    "JSON": "JSON Connection"
+}
+
 const status = {
     "CONNECTED": "CONNECTED",
     "ERROR": "ERROR",
@@ -54,6 +63,8 @@ const typeOfConnection = {
 }
 
 let currentStatus = status["NO_CONNECT"];
+
+let connectionMode = null;
 
 // menu
 function closeMenu() {
@@ -116,7 +127,7 @@ const getFCConfig = () => {
     return {
         host,
         port,
-        schema
+        schema: [schema]
     }
 }
 
@@ -142,10 +153,21 @@ function setButtonState(toState) {
     }
 }
 
+const fastConnectionBtnState = () => {
+    if (currentStatus === status["CONNECTED"] && connectionMode === connectionModes["FAST"]) {
+        fcConnect.textContent = "Disconnect";
+        fcConnect.classList.add('disconnect-btn');
+    } else {
+        fcConnect.textContent = "Connect";
+        fcConnect.classList.remove('disconnect-btn')
+    }
+}
+
 const updateStatusField = (status) => {
     currentStatus = status;
     statusTextField.textContent = currentStatus;
     statusCircle.style.background = statusColor[currentStatus];
+    modeElement.textContent = connectionMode === null ? "..." : connectionMode;
 }
 
 const updateConnectionInfoFields = (connection) => {
@@ -178,12 +200,17 @@ function init() {
 
     // handlers for btns
     connectBtnElement.addEventListener('click', _ => {
-        if (currentStatus === status["CONNECTED"]) port.postMessage({
-            command: "disconnect"
-        });
-        else port.postMessage({
-            command: "connect"
-        });
+        if (currentStatus === status["CONNECTED"]) {
+            port.postMessage({
+                command: "disconnect"
+            });
+            connectionMode = null;
+        } else {
+            port.postMessage({
+                command: "connect",
+            });
+            connectionMode = connectionModes["SIMPLE"]
+        };
     })
 
     fcConnect.addEventListener('click', _ => {
@@ -192,10 +219,38 @@ function init() {
             console.warn('fc-error');
             return false;
         };
-        port.postMessage({
-            command: "fc-connect",
-            connectionConfig
-        })
+
+        if (currentStatus === status["CONNECTED"] && connectionMode === connectionModes["FAST"]) {
+            port.postMessage({
+                command: "disconnect"
+            });
+            connectionMode = null;
+        } else {
+            port.postMessage({
+                command: "fc-connect",
+                connectionConfig
+            })
+            connectionMode = connectionModes["FAST"]
+        }
+    })
+
+    jsonInputField.addEventListener('change', e => {
+        const file = jsonInputField.files[0];
+
+        if (file.type !== "application/json") return false;
+
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            const proxysList = JSON.parse(e.target.result);
+            if ("proxys" in proxysList) {
+                port.postMessage({
+                    command: "json-connect",
+                    data: proxysList
+                })
+                connectionMode = connectionModes["JSON"]
+            }
+        };
+        reader.readAsText(file);
     })
 
     // listener
@@ -204,9 +259,11 @@ function init() {
             updateStatusField(msg.status)
             updateConnectionInfoFields(msg.connection)
             setButtonState(currentStatus)
+            fastConnectionBtnState()
         }
 
         if (msg.command === "error") {
+            connectionMode = null
             setButtonState(status["ERROR"])
             updateStatusField(msg.status)
             updateConnectionInfoFields()
