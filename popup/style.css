@@ -33,12 +33,12 @@ ul {
 }
 
 .header {
-    background: gray;
+    background: transparent;
     width: 100%;
     height: 60px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: var(--base-padding);
 }
 
@@ -70,6 +70,22 @@ ul {
     aspect-ratio: 1 / 1;
 }
 
+.change-btn {
+    width: 100%;
+    padding: 12px var(--base-padding);
+    background: #b5c6e0;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    color: #fff;
+    transition: all .3s ease-in-out;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.change-btn:hover {
+    background: #9babc2;
+}
+
 .content {
     width: 100%;
     flex: 1;
@@ -78,8 +94,7 @@ ul {
 
 .footer {
     width: 100%;
-    background: gray;
-    padding: 10px var(--base-padding)
+    padding: 8px 16px;
 }
 
 .manage {
@@ -87,12 +102,45 @@ ul {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 30px var(--base-padding);
+    padding: 20px var(--base-padding);
     height: 100%;
 }
 
 .manage-info__data {
-    margin: 15px 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 4px;
+}
+
+.manage-info__data-field {
+    background: #EDEDED;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 4px;
+    padding: 4px 6px;
+    height: 40px;
+}
+
+.manage-info__mode {
+    grid-area: 2 / 2 / 2 / 4;
+}
+
+.manage-info__host {
+    grid-area: 1 / 1 / 1 / 3;
+}
+
+.manage-info__port {
+    grid-area: 1 / 3 / 1 / 4;
+}
+
+.manage-info__schema {
+    grid-area: 2 / 1 / 2 / 2;
+}
+
+.manage-info {
+    width: 100%;
 }
 
 .menu {
@@ -127,7 +175,7 @@ ul {
 }
 
 .connect-btn {
-    width: 180px;
+    width: 100%;
     padding: 12px var(--base-padding);
     background: #b5c6e0;
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -136,6 +184,7 @@ ul {
     transition: all .3s ease-in-out;
     font-size: 18px;
     cursor: pointer;
+    margin: 6px 0;
 }
 
 .connect-btn:hover {
@@ -246,4 +295,26 @@ ul {
 
 .fast-connect {
     width: 100%;
+}
+
+.chosewindow {
+    position: fixed;
+    left: 100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding: var(--base-padding);
+    transition: left .5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    z-index: 5;
+    overflow-y: auto;
+    gap: 20px;
+}
+
+.chosewindow__item {
+    padding: 5px 10px;
+    box-shadow: 0 0 10px 2px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    cursor: pointer;
 }

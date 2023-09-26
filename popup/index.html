@@ -9,10 +9,7 @@
 </head>
 
 <body>
-    <header class="header glass">
-        <a class="header__logo">
-            <img class="logo__icon" src="./assets/logo.svg" alt="logo" />
-        </a>
+    <header class="header">
         <button id="menuopen" class="menu-btn">
             <img class="menu-btn__icon" src="./assets/menu.svg" alt="menu" />
         </button>
@@ -27,13 +24,25 @@
                     <h1 id="status" class="status-text">No Connected</h1>
                 </div>
                 <div class="manage-info">
-                    <button id="connect-btn" class="connect-btn">Connect</button>
                     <div class="manage-info__data">
-                        <p class="text">mode: <span id="type-connect">...</span></p>
-                        <p class="text">host: <span id="host">...</span></p>
-                        <p class="text">port: <span id="port">...</span></p>
-                        <p class="text">schema: <span id="schema">...</span></p>
+                        <div class="manage-info__data-field manage-info__mode">
+                            <h4 class="manage-info__data-title">Mode: </h4>
+                            <span id="type-connect">...</span>
+                        </div>
+                        <div class="manage-info__data-field manage-info__host">
+                            <h4 class="manage-info__data-title">Host: </h4>
+                            <span id="host">...</span>
+                        </div>
+                        <div class="manage-info__data-field manage-info__port">
+                            <h4 class="manage-info__data-title">Port: </h4>
+                            <span id="port">...</span>
+                        </div>
+                        <div class="manage-info__data-field manage-info__schema">
+                            <h4 class="manage-info__data-title">Schema: </h4>
+                            <span id="schema">...</span>
+                        </div>
                     </div>
+                    <button id="connect-btn" class="connect-btn">Connect</button>
                 </div>
             </div>
         </div>
@@ -66,10 +75,10 @@
     </section>
 
     <!-- screen with JSON connection -->
-    <section class="screen" id="screen3">
+    <!-- <section class="screen" id="screen3">
         <h1 class="title">JSON Connection</h1>
         <input id="json-file" type="file" />
-    </section>
+    </section> -->
 
     <!-- footer -->
     <footer class="footer glass">
@@ -90,12 +99,18 @@
             <ul class="menu-list">
                 <li class="menu-item" id="linkto-homescreen">Home</li>
                 <li class="menu-item" id="linkto-fastconnectionscreen">Fast Connection</li>
-                <li class="menu-item" id="linkto-jsonconnection">JSON Connection</li>
+                <!-- <li class="menu-item" id="linkto-jsonconnection">JSON Connection</li> -->
             </ul>
         </div>
     </section>
 
-    <script src="./popup.js" defer></script>
+    <!-- chose window -->
+    <section class="chosewindow glass" id="chosewindow">
+        hello
+    </section>
+
+    <script src="./scripts/screensManager.js" defer></script>
+    <script src="./popup.js" type="module" defer></script>
 </body>
 
 </html>
