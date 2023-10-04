@@ -1,116 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartProxy</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-    <header class="header">
-        <button id="menuopen" class="menu-btn">
-            <img class="menu-btn__icon" src="./assets/menu.svg" alt="menu" />
-        </button>
-    </header>
-
-    <!-- base screen -->
-    <section class="screen" id="screen1">
-        <div class="content">
-
-            <div class="manage">
-                <div id="status-circle" class="status-circle">
-                    <h1 id="status" class="status-text">No Connected</h1>
-                </div>
-                <div class="manage-info">
-                    <div class="manage-info__data">
-                        <div class="manage-info__data-field manage-info__mode">
-                            <h4 class="manage-info__data-title">Mode: </h4>
-                            <span id="type-connect">...</span>
-                        </div>
-                        <div class="manage-info__data-field manage-info__host">
-                            <h4 class="manage-info__data-title">Host: </h4>
-                            <span id="host">...</span>
-                        </div>
-                        <div class="manage-info__data-field manage-info__port">
-                            <h4 class="manage-info__data-title">Port: </h4>
-                            <span id="port">...</span>
-                        </div>
-                        <div class="manage-info__data-field manage-info__schema">
-                            <h4 class="manage-info__data-title">Schema: </h4>
-                            <span id="schema">...</span>
-                        </div>
-                    </div>
-                    <button id="connect-btn" class="connect-btn">Connect</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- screen with fast connection -->
-    <section class="screen" id="screen2">
-        <h1 class="title">Fast Connection</h1>
-
-        <section class="field">
-            <h3 class="lable">Host</h3>
-            <input id="fc-host" class="input-text" placeholder="host" />
-        </section>
-
-        <section class="field">
-            <h3 class="lable">Port</h3>
-            <input id="fc-port" class="input-text" placeholder="port" />
-        </section>
-
-        <section class="field">
-            <h3 class="lable">Schema</h3>
-            <select name="scheme" id="fc-schema">
-                <option value="http">http</option>
-                <option value="https">https</option>
-                <option value="socks4">socks4</option>
-                <option value="socks5">socks5</option>
-            </select>
-        </section> 
-        <button id="fc-connect" class="connect-btn fast-connect">Connect</button>
-    </section>
-
-    <!-- screen with JSON connection -->
-    <!-- <section class="screen" id="screen3">
-        <h1 class="title">JSON Connection</h1>
-        <input id="json-file" type="file" />
-    </section> -->
-
-    <!-- footer -->
-    <footer class="footer glass">
-        <a class="github-link" href="https://github.com/VladislavKori/Smartproxy">
-            <img class="github-icon" src="assets/github-mark.svg" />
-            <p class="github-link__text">VladislavKori</p>
-        </a>
-    </footer>
-
-    <!-- menu  -->
-    <section class="menu glass" id="menu">
-        <header class="menu__header">
-            <button id="closemenu" class="menu-btn">
-                <img class="close-icon" src="./assets/clsoe.svg" alt="close" />
-            </button>
-        </header>
-        <div class="content">
-            <ul class="menu-list">
-                <li class="menu-item" id="linkto-homescreen">Home</li>
-                <li class="menu-item" id="linkto-fastconnectionscreen">Fast Connection</li>
-                <!-- <li class="menu-item" id="linkto-jsonconnection">JSON Connection</li> -->
-            </ul>
-        </div>
-    </section>
-
-    <!-- chose window -->
-    <section class="chosewindow glass" id="chosewindow">
-        hello
-    </section>
-
-    <script src="./scripts/screensManager.js" defer></script>
-    <script src="./popup.js" type="module" defer></script>
-</body>
-
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + Solid + TS</title>
+    <script type="module" crossorigin src="./assets/index-48dd1bf4.js"></script>
+    <link rel="stylesheet" href="./assets/index-4a612503.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    
+  </body>
 </html>
