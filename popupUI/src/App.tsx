@@ -1,17 +1,25 @@
+import { Match, Switch, createSignal } from 'solid-js'
 import './App.scss'
 import Header from './components/Header/Header'
 import Info from './components/Info/Info'
 import Manage from './components/Manage/Manage'
-import Modal from './components/Modals/Modal'
 
 function App() {
+
+  const [route, setRoute] = createSignal<string>("/")
 
   return (
     <>
       <Header />
-      <Info />
-      <Manage />
-      <Modal />
+      <Switch>
+        <Match when={route() === "/"}>
+          <Info />
+          <Manage setSettings={setRoute} />
+        </Match>
+        <Match when={route() === "/settings"}>
+          <p>23</p>
+        </Match>
+      </Switch>
     </>
   )
 }
