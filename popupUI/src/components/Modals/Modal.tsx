@@ -6,7 +6,6 @@ import FastConnectionIcon from '../../assets/modal/fastc.svg'
 
 export default function Modal({isOpen, closeModal}: {isOpen: any, closeModal: any}) {
 
-    console.log(isOpen())
     return (
         <Portal mount={document.getElementById('modal') as HTMLDivElement}>
             <div class={isOpen() ? "modal" : "modal modal_close"}>

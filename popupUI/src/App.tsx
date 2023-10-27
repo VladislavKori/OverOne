@@ -3,10 +3,11 @@ import './App.scss'
 import Header from './components/Header/Header'
 import Info from './components/Info/Info'
 import Manage from './components/Manage/Manage'
+import Settings from './components/Settings/Settings'
 
 function App() {
 
-  const [route, setRoute] = createSignal<string>("/")
+  const [route, setRoute] = createSignal<string>("/settings")
 
   return (
     <>
@@ -17,7 +18,7 @@ function App() {
           <Manage setSettings={setRoute} />
         </Match>
         <Match when={route() === "/settings"}>
-          <p>23</p>
+          <Settings changePage={setRoute} />
         </Match>
       </Switch>
     </>

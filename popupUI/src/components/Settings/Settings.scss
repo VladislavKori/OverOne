@@ -1,0 +1,121 @@
+.settings {
+    padding: 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+        border-bottom: 1px solid #fff;
+        padding-bottom: 10px;
+    }
+
+    &__btn-to-previous {
+        background: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+
+        cursor: pointer;
+
+        & img {
+            width: 6px;
+            height: 10px;
+        }
+
+        & p {
+            color: #FFF;
+            font-family: var(--default-font);
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+        }
+    }
+
+    &__title {
+        color: #FFF;
+        font-family: var(--default-font);
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    &__subtitle {
+        color: #373737;
+        font-family: var(--default-font);
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        row-gap: 24px;
+        flex: 1;
+        padding: 10px 0;
+    }
+
+    &__text-block {
+        display: flex;
+        flex-direction: column;
+        row-gap: 2px;
+    }
+
+    &__block {
+        display: flex;
+        flex-direction: column;
+        row-gap: 8px;
+
+        &_horizontal {
+            flex-direction: row;
+            justify-content: space-between;
+            column-gap: 10px;
+            align-items: center;
+        }
+    }
+
+    &__input {
+        outline: none;
+        border: none;
+        border-radius: 7px;
+        background: #1C1E2C;
+        box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.25);
+        padding: 10px 8px;
+
+        color: #EFEFEF;
+        font-family: var(--default-font);
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    &__manage {
+
+        &-btn {
+            width: 100%;
+            border-radius: 7px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.10);
+
+            color: #FFF;
+            font-family: var(--default-font);
+            padding: 8px 25px;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+
+            cursor: pointer;
+            transition: background .3s ease-in-out;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.20);
+            }
+        }
+    }
+}

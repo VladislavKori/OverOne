@@ -2,6 +2,7 @@ import './Info.scss'
 
 // icons
 import Conn from '../../assets/smiles/conn.svg';
+import Noc from '../../assets/smiles/noc.svg';
 
 export default function Info() {
 
@@ -11,7 +12,7 @@ export default function Info() {
         <div class="info">
             <div class="info__circle">
                 <div class="info__circle-inner">
-                    <img src={Conn} />
+                    <img src={Noc} />
                 </div>
             </div>
             <div class="info__status">
