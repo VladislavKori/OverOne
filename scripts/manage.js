@@ -1,19 +1,15 @@
 // generate connection config
-const generateConfig = async (proxy) => {
+const generateConfig = ({host, schema, port, bypassList = []}) => {
     try {
-        const host = proxy.host;
-        const scheme = proxy.schema[0];
-        const port = Number(proxy.port);
-
         var config = {
             mode: "fixed_servers",
             rules: {
                 proxyForHttps: {
-                    scheme: scheme,
+                    scheme: schema,
                     host: host,
                     port: port,
                 },
-                bypassList: []
+                bypassList: bypassList
             }
         };
 
@@ -24,18 +20,22 @@ const generateConfig = async (proxy) => {
 }
 
 // connect proxy
-export const connect = async (data) => {
+export const connect = ({host, schema, port}) => {
     try {
-        const config = await generateConfig(data);
 
-        return chrome.proxy.settings.set({
+        // need get settings and pass "bypassList"
+        const config = generateConfig({host, schema, port});
+
+        chrome.proxy.settings.set({
                 value: config,
                 scope: 'regular'
             },
-            async function () {
-                console.log('set-proxy', config.rules.proxyForHttps)
-            }
+            () => console.log('set-proxy', config.rules.proxyForHttps)
         );
+
+        return {
+            success: true
+        }
     } catch (err) {
         console.error(err)
         throw new Error("Error from connection func")
@@ -49,9 +49,8 @@ export const disconnect = () => {
     })
 }
 
-
 // get settings about proxy
-export const getSettings = async () => {
+export const getStatus = async () => {
     let baseConnectionObject = null;
 
     const settings = await chrome.proxy.settings.get({});

@@ -5,9 +5,3 @@ export const status = {
     "SEARCH": "SEARCH",
     "NO_CONNECT": "NO_CONNECT"
 }
-
-export const typeOfConnection = {
-    "SIMPLE": "Simple Connect",
-    "FAST": "Fast Connect",
-    "JSON": "JSON Connect"
-}

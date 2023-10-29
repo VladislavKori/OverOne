@@ -1,4 +1,4 @@
-import { FlowComponent, For, JSX, Setter, createResource } from "solid-js";
+import { For } from "solid-js";
 
 import './List.scss'
 

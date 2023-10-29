@@ -1,7 +1,7 @@
 import './Info.scss'
 
 // icons
-import Conn from '../../assets/smiles/conn.svg';
+// import Conn from '../../assets/smiles/conn.svg';
 import Noc from '../../assets/smiles/noc.svg';
 
 export default function Info() {
