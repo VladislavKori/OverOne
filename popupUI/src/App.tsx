@@ -4,10 +4,11 @@ import Header from './components/Header/Header'
 import Info from './components/Info/Info'
 import Manage from './components/Manage/Manage'
 import Settings from './components/Settings/Settings'
+import List from './components/List/List'
 
 function App() {
 
-  const [route, setRoute] = createSignal<string>("/settings")
+  const [route, setRoute] = createSignal<string>("/")
 
   return (
     <>
@@ -15,10 +16,13 @@ function App() {
       <Switch>
         <Match when={route() === "/"}>
           <Info />
-          <Manage setSettings={setRoute} />
+          <Manage changePage={setRoute} />
         </Match>
         <Match when={route() === "/settings"}>
           <Settings changePage={setRoute} />
+        </Match>
+        <Match when={route() === "/list"}>
+          <List changePage={setRoute} />
         </Match>
       </Switch>
     </>
