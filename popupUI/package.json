@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/chrome": "^0.0.248",
     "sass": "^1.69.4",
     "solid-js": "^1.7.8"
   },
