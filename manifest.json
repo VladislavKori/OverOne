@@ -4,7 +4,13 @@
     "version": "1.0",
     "description": "Proxy Chrome Extension",
     "action": {
-        "default_popup": "./dist/index.html"
+        "default_title": "OverOne",
+        "default_icon": {
+            "16": "./images/Logo16.png",
+            "24": "./images/Logo24.png",
+            "32": "./images/Logo32.png"
+        },
+        "default_popup": "./popup/index.html"
     },
     "background": {
         "service_worker": "scripts/background.js",
@@ -17,19 +23,5 @@
     ],
     "host_permissions": [
         "<all_urls>"
-    ],
-    "web_accessible_resources": [
-        {
-            "resources": [
-                "scripts/*.js",
-                "scripts/content_main.js",
-                "gists.js",
-                "*.svg"
-            ],
-            "matches": [
-                "http://*/*",
-                "https://*/*"
-            ]
-        }
     ]
 }
