@@ -5,26 +5,29 @@ import Info from './components/Info/Info'
 import Manage from './components/Manage/Manage'
 import Settings from './components/Settings/Settings'
 import List from './components/List/List'
+import { ContextProvider } from './context/GlobalContext'
 
 function App() {
 
-  const [route, setRoute] = createSignal<string>("/")
+  const [route, setRoute] = createSignal<string>("/");
 
   return (
     <>
-      <Header />
-      <Switch>
-        <Match when={route() === "/"}>
-          <Info />
-          <Manage changePage={setRoute} />
-        </Match>
-        <Match when={route() === "/settings"}>
-          <Settings changePage={setRoute} />
-        </Match>
-        <Match when={route() === "/list"}>
-          <List changePage={setRoute} />
-        </Match>
-      </Switch>
+      <ContextProvider>
+        <Header />
+        <Switch>
+          <Match when={route() === "/"}>
+            <Info />
+            <Manage changePage={setRoute} />
+          </Match>
+          <Match when={route() === "/settings"}>
+            <Settings changePage={setRoute} />
+          </Match>
+          <Match when={route() === "/list"}>
+            <List changePage={setRoute} />
+          </Match>
+        </Switch>
+      </ContextProvider>
     </>
   )
 }

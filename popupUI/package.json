@@ -6,9 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "tsc-watcher": "tsc --watch",
+    "build-watcher": "vite build --watch",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/chrome": "^0.0.248",
     "sass": "^1.69.4",
     "solid-js": "^1.7.8"
   },

@@ -10,7 +10,6 @@
     &__circle {
         width: 235px;
         height: 235px;
-        background: linear-gradient(180deg, #FFF 16.81%, #5089B3 81.91%);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -25,6 +24,18 @@
             align-items: center;
             justify-content: center;
             color: white;
+        }
+
+        &-state0 {
+            background: linear-gradient(180deg, #FFF 16.81%, #5089B3 81.91%);
+        }
+
+        &-state1 {
+            background: linear-gradient(180deg, #703DFF 16.81%, #7794FB 81.91%);
+        }
+
+        &-state2 {
+            background: linear-gradient(180deg, #FF2F61 16.81%, #53001E 81.91%);
         }
     }
 
@@ -56,6 +67,10 @@
         font-family: var(--default-font);
         font-size: 12px;
         font-weight: 500;
-        width: 190px
+        width: 190px;
+
+        &-1 {
+            cursor: pointer;
+        }
     }
 }
