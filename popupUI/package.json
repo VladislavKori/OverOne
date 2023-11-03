@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "tsc-watcher": "tsc --watch",
+    "build-watcher": "vite build --watch",
     "preview": "vite preview"
   },
   "dependencies": {

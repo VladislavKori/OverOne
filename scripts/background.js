@@ -39,6 +39,7 @@ chrome.runtime.onConnect.addListener(port => {
             // get status handler
             if (msg.command === "getStatus") {
                 const info = getStatus();
+                console.log(info);
 
                 port.postMessage({
                     command: "state",
