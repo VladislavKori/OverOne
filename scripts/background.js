@@ -11,14 +11,15 @@ chrome.runtime.onConnect.addListener(port => {
         port.onMessage.addListener(async function (msg) {
             // connect handler
             if (msg.command === "connect") {
-                
-                const {success} = connect(msg.data);
+                const { success } = connect(msg.data);
                 const info = getStatus();
 
                 const response = {
-                    status: status["CONNECTED"],
                     command: "state",
-                    connection: info,
+                    data: {
+                        connection: info,
+                        error: null
+                    }
                 }
                 port.postMessage(response);
             }
@@ -29,9 +30,11 @@ chrome.runtime.onConnect.addListener(port => {
                 const info = getStatus();
 
                 const response = {
-                    status: status["NO_CONNECT"],
                     command: "state",
-                    connection: info,
+                    data: {
+                        connection: info,
+                        error: null
+                    }
                 }
                 port.postMessage(response);
             }
@@ -43,8 +46,10 @@ chrome.runtime.onConnect.addListener(port => {
 
                 port.postMessage({
                     command: "state",
-                    status: info === null ? status["NO_CONNECT"] : status["CONNECTED"],
-                    connection: info,
+                    data: {
+                        connection: info,
+                        error: null
+                    }
                 });
             }
 
@@ -65,8 +70,12 @@ chrome.runtime.onConnect.addListener(port => {
                 disconnect()
                 port.postMessage({
                     command: "error",
-                    status: status["ERROR"],
-                    error: details
+                    data: {
+                        connection: null,
+                        error: {
+                            info: details
+                        }
+                    }
                 })
             }
         })
@@ -77,8 +86,12 @@ chrome.runtime.onConnect.addListener(port => {
             console.error(error, 'error');
             port.postMessage({
                 command: "error",
-                status: status["ERROR"],
-                error: error
+                data: {
+                    connection: null,
+                    error: {
+                        info: error
+                    }
+                }
             })
         }
     }

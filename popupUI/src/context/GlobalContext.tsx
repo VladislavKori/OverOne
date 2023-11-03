@@ -6,13 +6,16 @@ interface IInitialValue {
     state: Accessor<{
         connection: null | TranspConnection
         error: null | TranspError
-    }> | null
-    static: null | string
+    }> | null,
+    methods: null | { 
+        getStatus: () => void
+        connect: (data: TranspConnection) => void
+    }
 }
 
 const initialValue: IInitialValue = {
     state: null,
-    static: null
+    methods: null
 };
 
 const GlobalContext = createContext(initialValue);
@@ -28,15 +31,18 @@ export function ContextProvider(props: IContextProvider) {
         error: null,
     })
 
-    const store = {
-        state,
-        static: "jwe"
-    }
-
     // transport code 
     const transportManager = new TransportNode("hello");
     transportManager.initListener(state, updateState)
     transportManager.getStatus()
+
+    const store = {
+        state,
+        methods: {
+            getStatus: transportManager.getStatus,
+            connect: (props: TranspConnection) => transportManager.connection(props)
+        }
+    }
 
     return (
         <GlobalContext.Provider value={store}>

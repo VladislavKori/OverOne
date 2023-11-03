@@ -1,11 +1,9 @@
 import { Setter } from "solid-js";
-import { TranspConnection } from "../types/TransportTypes";
+import { TranspConnection, TranspData } from "../types/TransportTypes";
 
 interface IMessage {
     command: string
-    data: null | {
-        connection: TranspConnection
-    }
+    data: TranspData
 }
 
 export class TransportNode {
@@ -24,7 +22,7 @@ export class TransportNode {
 
         this.port.onMessage.addListener((msg: IMessage) => {
             if (msg.command === "state") {
-                updateStore({ ...store(), connection: true })
+                updateStore({ ...store(), ...msg.data })
             }
         });
     }
@@ -34,6 +32,27 @@ export class TransportNode {
 
         this.port?.postMessage({
             command: "getStatus"
+        })
+    }
+
+    public connection({host, port, schema}: TranspConnection): (void | Error) {
+        if (this.port === null) { return new Error("port not initialize") }
+
+        this.port?.postMessage({
+            command: "connect",
+            data: {
+                host: host,
+                port: port,
+                schema: schema
+            }
+        })
+    }
+
+    public disconnect(): (void | Error) {
+        if (this.port === null) { return new Error("port not initialize") }
+
+        this.port?.postMessage({
+            command: "disconnect",
         })
     }
 }
