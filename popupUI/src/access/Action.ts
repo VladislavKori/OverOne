@@ -24,6 +24,10 @@ export class TransportNode {
             if (msg.command === "state") {
                 updateStore({ ...store(), ...msg.data })
             }
+
+            if (msg.command === "error") {
+                updateStore({ ...store(), ...msg.data})
+            }
         });
     }
 
@@ -35,7 +39,7 @@ export class TransportNode {
         })
     }
 
-    public connection({host, port, schema}: TranspConnection): (void | Error) {
+    public connection({host, port, scheme}: TranspConnection): (void | Error) {
         if (this.port === null) { return new Error("port not initialize") }
 
         this.port?.postMessage({
@@ -43,7 +47,7 @@ export class TransportNode {
             data: {
                 host: host,
                 port: port,
-                schema: schema
+                schema: scheme
             }
         })
     }
@@ -52,7 +56,7 @@ export class TransportNode {
         if (this.port === null) { return new Error("port not initialize") }
 
         this.port?.postMessage({
-            command: "disconnect",
+            command: "disconnect"
         })
     }
 }

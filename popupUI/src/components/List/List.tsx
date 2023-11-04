@@ -17,7 +17,7 @@ export default function List({changePage}: { changePage: any }) {
         data.methods?.connect({
             host: "192.241.149.84",
             port: "37455",
-            schema: "socks5"
+            scheme: "socks5"
         });
         changePage("/");
     }

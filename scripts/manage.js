@@ -7,7 +7,7 @@ const generateConfig = ({host, schema, port, bypassList = []}) => {
                 proxyForHttps: {
                     scheme: schema,
                     host: host,
-                    port: port,
+                    port: Number(port),
                 },
                 bypassList: bypassList
             }
@@ -22,30 +22,32 @@ const generateConfig = ({host, schema, port, bypassList = []}) => {
 // connect proxy
 export const connect = ({host, schema, port}) => {
     try {
-
         // need get settings and pass "bypassList"
         const config = generateConfig({host, schema, port});
 
-        chrome.proxy.settings.set({
+        return chrome.proxy.settings.set({
                 value: config,
                 scope: 'regular'
             },
             () => console.log('set-proxy', config.rules.proxyForHttps)
         );
 
-        return {
-            success: true
-        }
     } catch (err) {
-        console.error(err)
         throw new Error("Error from connection func")
     }
 }
 
 // disconect proxy
-export const disconnect = () => {
-    chrome.proxy.settings.clear({}, _ => {
-        console.log('chrome settings clear')
+export const disconnect = async (callback) => {
+    new Promise((resolve, reject) => {
+        chrome.proxy.settings.clear({}, _ => {
+            console.log('chrome settings clear');
+            resolve("success")
+        })
+    }).then(data => {
+        if (data === "success" && callback !== undefined) {
+            callback()
+        }
     })
 }
 

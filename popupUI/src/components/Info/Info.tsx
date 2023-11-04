@@ -5,19 +5,28 @@ import Conn from '../../assets/smiles/conn.svg';
 import Noc from '../../assets/smiles/noc.svg';
 import Err from '../../assets/smiles/err.svg';
 
-import { createSignal, useContext } from 'solid-js';
+import { createEffect, createSignal, useContext } from 'solid-js';
 import { GlobalContext } from '../../context/GlobalContext';
+import { TranspConnection, TranspError } from '../../types/TransportTypes';
 
 export default function Info() {
 
     const [state, setState] = createSignal<number>(0);
     const info = useContext(GlobalContext);
 
-    const data = info.state !== null ? info.state() : null;
+    type dataType = {
+        connection: null | TranspConnection
+        error: null | TranspError
+    }
 
-    if (data === null) { setState(0) }
-    else if (data.connection !== null) { setState(1) }
-    else if (data.error) { setState(2) }
+    let data: null | dataType = null;
+
+    createEffect(() => {
+        data = info.state !== null ? info.state() : null;
+        if (data === null || data.connection === null) { setState(0) }
+        else if (data.connection !== null && data.error === null ) { setState(1) }
+        else if (data.error !== null ) { setState(2) }
+    })
 
     return (
         <div class="info">
@@ -38,7 +47,10 @@ export default function Info() {
                 </p>
                 <div class={"info__screen" + " " + `info__screen-${state()}`}>
                     {state() === 0 ? "wait connection...." : null}
-                    {state() === 1 ? `${data?.connection?.schema} | ${data?.connection?.host}:${data?.connection?.port}` : null}
+                    {
+                        //@ts-ignore
+                        state() === 1 ? `${data.connection.scheme} | ${data.connection.host}:${data.connection.port}` : null
+                    }
                     {state() === 2 ? `Try to recconnect` : null}
                 </div>
             </div>

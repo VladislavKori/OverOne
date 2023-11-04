@@ -67,7 +67,8 @@
         font-family: var(--default-font);
         font-size: 12px;
         font-weight: 500;
-        width: 190px;
+        min-width: 190px;
+        width: max-content;
 
         &-1 {
             cursor: pointer;

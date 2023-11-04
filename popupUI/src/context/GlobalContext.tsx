@@ -2,14 +2,16 @@ import { Accessor, JSX, createContext, createSignal } from "solid-js";
 import { TranspConnection, TranspError } from "../types/TransportTypes";
 import { TransportNode } from "../access/Action";
 
-interface IInitialValue {
+export interface IInitialValue {
     state: Accessor<{
         connection: null | TranspConnection
         error: null | TranspError
     }> | null,
-    methods: null | { 
+    methods: null | {
         getStatus: () => void
         connect: (data: TranspConnection) => void
+        disconnect: () => void
+        resetSettings: () => void
     }
 }
 
@@ -36,11 +38,23 @@ export function ContextProvider(props: IContextProvider) {
     transportManager.initListener(state, updateState)
     transportManager.getStatus()
 
-    const store = {
+    setInterval(() => {
+        transportManager.getStatus()
+    }, 1000)
+
+    let store = {
         state,
         methods: {
             getStatus: transportManager.getStatus,
-            connect: (props: TranspConnection) => transportManager.connection(props)
+            connect: (props: TranspConnection) => transportManager.connection(props),
+            disconnect: () => transportManager.disconnect(),
+            resetSettings: () => {
+                transportManager.disconnect();
+                updateState({
+                    connection: null,
+                    error: null,
+                });
+            }
         }
     }
 
