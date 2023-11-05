@@ -5,8 +5,10 @@ import {
     getStatus
 } from "./manage.js";
 
-
-
+let settings = {
+    bypassList: [],
+    incognito: false
+}
 
 chrome.runtime.onConnect.addListener(function (port) {
     let errorState = false;
@@ -14,7 +16,7 @@ chrome.runtime.onConnect.addListener(function (port) {
     port.onMessage.addListener(async function (msg) {
         // connect handler
         if (msg.command === "connect") {
-            connect(msg.data);
+            connect({...msg.data, settings});
             const info = await getStatus();
 
             const response = {
@@ -60,17 +62,27 @@ chrome.runtime.onConnect.addListener(function (port) {
 
         // set settings
         if (msg.command === "setSettings") {
-
+            settings = msg.data;
+            console.log("settings set: ", settings)
+            port.postMessage({
+                command: "settings",
+                data: settings
+            });
         }
 
         // get settings
         if (msg.command === "getSettings") {
-
+            console.log("get settings: ", settings)
+            port.postMessage({
+                command: "settings",
+                data: settings
+            });
         }
     });
 
     // Error handler. It's disconect not work proxy and send status to popup window
     chrome.proxy.onProxyError.addListener(details => {
+        console.log(details)
         if (details.fatal && !errorState) {
             return errorState = true;
         }

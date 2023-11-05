@@ -1,5 +1,5 @@
 import { Accessor, JSX, createContext, createSignal } from "solid-js";
-import { TranspConnection, TranspError } from "../types/TransportTypes";
+import { TranspConnection, TranspError, TranspSettings } from "../types/TransportTypes";
 import { TransportNode } from "../access/Action";
 
 export interface IInitialValue {
@@ -7,16 +7,23 @@ export interface IInitialValue {
         connection: null | TranspConnection
         error: null | TranspError
     }> | null,
+    settingsStore: Accessor<{
+        bypassList: Array<string>,
+        incognito: boolean
+    }> | null,
     methods: null | {
         getStatus: () => void
         connect: (data: TranspConnection) => void
         disconnect: () => void
         resetSettings: () => void
+        getSettings: () => void
+        setSettings: (props: TranspSettings) => void
     }
 }
 
 const initialValue: IInitialValue = {
     state: null,
+    settingsStore: null,
     methods: null
 };
 
@@ -33,9 +40,17 @@ export function ContextProvider(props: IContextProvider) {
         error: null,
     })
 
+    const [settingsStore, updateSettings] = createSignal<{
+        bypassList: Array<string>,
+        incognito: boolean
+    }>({
+        bypassList: [],
+        incognito: false
+    })
+
     // transport code 
     const transportManager = new TransportNode("hello");
-    transportManager.initListener(state, updateState)
+    transportManager.initListener(state, settingsStore, updateState, updateSettings)
     transportManager.getStatus()
 
     setInterval(() => {
@@ -44,6 +59,7 @@ export function ContextProvider(props: IContextProvider) {
 
     let store = {
         state,
+        settingsStore,
         methods: {
             getStatus: transportManager.getStatus,
             connect: (props: TranspConnection) => transportManager.connection(props),
@@ -54,7 +70,9 @@ export function ContextProvider(props: IContextProvider) {
                     connection: null,
                     error: null,
                 });
-            }
+            },
+            setSettings: (props: TranspSettings) => transportManager.setSettings(props),
+            getSettings: () => transportManager.getSettigns()
         }
     }
 

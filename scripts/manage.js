@@ -1,5 +1,5 @@
 // generate connection config
-const generateConfig = ({host, schema, port, bypassList = []}) => {
+const generateConfig = ({ host, schema, port, bypassList = [] }) => {
     try {
         var config = {
             mode: "fixed_servers",
@@ -20,19 +20,28 @@ const generateConfig = ({host, schema, port, bypassList = []}) => {
 }
 
 // connect proxy
-export const connect = ({host, schema, port}) => {
+export const connect = ({ host, schema, port, settings }) => {
     try {
         // need get settings and pass "bypassList"
-        const config = generateConfig({host, schema, port});
+        const config = generateConfig({
+            host,
+            schema,
+            port,
+            bypassList: settings.bypassList
+        });
+        console.log("config: ", config, settings)
+
+        const scope = settings.incognito ? "incognito_persistent" : "regular" 
 
         return chrome.proxy.settings.set({
-                value: config,
-                scope: 'regular'
-            },
+            value: config,
+            scope: scope
+        },
             () => console.log('set-proxy', config.rules.proxyForHttps)
         );
 
     } catch (err) {
+        console.log(err)
         throw new Error("Error from connection func")
     }
 }

@@ -15,9 +15,9 @@ export default function List({changePage}: { changePage: any }) {
 
     function connectProxy(_data: any) {
         data.methods?.connect({
-            host: "192.241.149.84",
-            port: "37455",
-            scheme: "socks5"
+            host: _data.ip,
+            port: _data.port,
+            scheme: _data.schema
         });
         changePage("/");
     }

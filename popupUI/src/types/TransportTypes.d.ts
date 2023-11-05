@@ -14,3 +14,8 @@ export interface TranspData {
     connection: TranspConnection | null
     error: TranspError
 }
+
+export interface TranspSettings {
+    bypassList: Array<string>
+    incognito: boolean
+}

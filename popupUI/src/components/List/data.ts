@@ -1,15 +1,9 @@
 const proxys = [
     {
-        ip: "124.536.36.35",
-        port: 2400,
-        country: "RU",
-        schema: "https"
-    },
-    {
-        ip: "124.536.36.35",
-        port: 2400,
-        country: "RU",
-        schema: "https"
+        ip: "82.137.250.156",
+        port: 4145,
+        country: " US",
+        schema: "socks4"
     },
 ]
 

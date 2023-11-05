@@ -2,8 +2,51 @@ import './Settings.scss'
 
 import ReturnIcon from '../../assets/icons/return.svg'
 import Switch from '../Elements/Switch/Switch'
+import { createEffect, createSignal, onMount, useContext } from 'solid-js'
+import { GlobalContext } from '../../context/GlobalContext'
 
 export default function Settings({ changePage }: { changePage: any }) {
+
+    const data = useContext(GlobalContext);
+
+    const [allSettingsApply, setAllSettingsApply] = createSignal<boolean>(false);
+    const [bypassList, setBypassList] = createSignal<string>("");
+    const [incognitoIsActive, setIncognitoActive] = createSignal<boolean>(false);
+
+    function updateFileds(info: any) {
+        console.log("from updated Fields: ", info)
+        setBypassList(info.bypassList.join(", "));
+        setIncognitoActive(info.incognito);
+    }
+
+    onMount(() => {
+        data.methods?.getSettings();
+    })
+
+    createEffect(() => {
+        if (data.settingsStore !== null) {
+            let info = data.settingsStore();
+            updateFileds(info)
+        }
+    })
+
+    createEffect(() => {
+        bypassList(); incognitoIsActive();
+        setAllSettingsApply(false)
+    })
+
+    const settingsSaveHandler = () => {
+        console.log("data near setter: ", {
+            bypassList: bypassList().split(", "),
+            incognito: incognitoIsActive()
+        })
+        data.methods?.setSettings({
+            bypassList: bypassList().split(", "),
+            incognito: incognitoIsActive()
+        })
+        setAllSettingsApply(true);
+    }
+
     return (
         <div class="settings">
             <header class="settings__header">
@@ -29,31 +72,28 @@ export default function Settings({ changePage }: { changePage: any }) {
                             resize: "none"
                         }}
                         placeholder="Write somthing..."
+                        onInput={e => setBypassList(e.target.value)}
+                        value={bypassList()}
                     />
                 </div>
-
-                <div class="settings__block settings__block_horizontal">
-                    <div class="settings__text-block">
-                        <h2 class="settings__title">Warrnings</h2>
-                        <h3 class="settings__subtitle">Останавливать загрузку сайта при отключённом состоянии</h3>
-                    </div>
-                    <div class="settings__switch">
-                        <Switch />
-                    </div>
-                </div>
-
+                
                 <div class="settings__block settings__block_horizontal">
                     <div class="settings__text-block">
                         <h2 class="settings__title">Incognito</h2>
                         <h3 class="settings__subtitle">Work in incognito</h3>
                     </div>
                     <div class="settings__switch">
-                        <Switch />
+                        <Switch value={incognitoIsActive} setter={setIncognitoActive} />
                     </div>
                 </div>
             </div>
             <div class="settings__manage">
-                <button class="settings__manage-btn">Save</button>
+                <button
+                    class={"settings__manage-btn" + ` ${allSettingsApply() ? "settings__manage-btn_apply" : null}`}
+                    onClick={settingsSaveHandler}
+                >
+                    Save
+                </button>
             </div>
         </div>
     )

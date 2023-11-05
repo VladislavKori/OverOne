@@ -1,5 +1,5 @@
 import { Setter } from "solid-js";
-import { TranspConnection, TranspData } from "../types/TransportTypes";
+import { TranspConnection, TranspData, TranspSettings } from "../types/TransportTypes";
 
 interface IMessage {
     command: string
@@ -13,10 +13,18 @@ export class TransportNode {
         this.port = chrome.runtime.connect({ name: portName });
     }
 
-    initListener(store: any, updateStore: Setter<{
-        connection: null;
-        error: null;
-    }>) {
+    initListener(
+        store: any,
+        settingsStore: any,
+        updateStore: Setter<{
+            connection: null;
+            error: null;
+        }>,
+        updateSettings: Setter<{
+            bypassList: Array<string>,
+            incognito: boolean
+        }>
+    ) {
 
         if (this.port === null) { return new Error("port not initialize") }
 
@@ -25,8 +33,13 @@ export class TransportNode {
                 updateStore({ ...store(), ...msg.data })
             }
 
+            if (msg.command === "settings") {
+                console.log('updated')
+                updateSettings({ ...settingsStore(), ...msg.data })
+            }
+
             if (msg.command === "error") {
-                updateStore({ ...store(), ...msg.data})
+                updateStore({ ...store(), ...msg.data })
             }
         });
     }
@@ -39,7 +52,7 @@ export class TransportNode {
         })
     }
 
-    public connection({host, port, scheme}: TranspConnection): (void | Error) {
+    public connection({ host, port, scheme }: TranspConnection): (void | Error) {
         if (this.port === null) { return new Error("port not initialize") }
 
         this.port?.postMessage({
@@ -57,6 +70,31 @@ export class TransportNode {
 
         this.port?.postMessage({
             command: "disconnect"
+        })
+    }
+
+    public setSettings(settings: TranspSettings): (void | Error) {
+        if (this.port === null) { return new Error("port not initialize") }
+
+        console.log({
+            bypassList: settings.bypassList,
+            incognito: settings.incognito
+        })
+
+        this.port?.postMessage({
+            command: "setSettings",
+            data: {
+                bypassList: settings.bypassList,
+                incognito: settings.incognito
+            }
+        })
+    }
+
+    public getSettigns(): (void | Error) {
+        if (this.port === null) { return new Error("port not initialize") }
+
+        this.port?.postMessage({
+            command: "getSettings"
         })
     }
 }
