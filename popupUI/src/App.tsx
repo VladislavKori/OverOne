@@ -1,34 +1,49 @@
-import { Match, Switch, createSignal } from 'solid-js'
+import { ErrorBoundary, For, Match, Switch, useContext } from 'solid-js'
+
+// styles
 import './App.scss'
+
+// components
 import Header from './components/Header/Header'
-import Info from './components/Info/Info'
-import Manage from './components/Manage/Manage'
-import Settings from './components/Settings/Settings'
-import List from './components/List/List'
+
+// pages
+import { Home } from './pages/Home';
+import { Settings } from './pages/Settings'
+import { ProxysList } from './pages/ProxysList';
+
+// utils
 import { ContextProvider } from './context/GlobalContext'
+import { RouterCTXProvider, RouterContext } from './context/RouterContext'
+import ErrorBoundaryHandler from './components/Error/Error';
+
 
 function App() {
 
-  const [route, setRoute] = createSignal<string>("/");
+  const routerCtx = useContext(RouterContext)
+
+  const routes = [
+    { route: "/", element: Home },
+    { route: "/settings", element: Settings },
+    { route: "/list", element: ProxysList },
+  ]
 
   return (
-    <>
+    <ErrorBoundary fallback={ErrorBoundaryHandler}>
       <ContextProvider>
-        <Header />
-        <Switch>
-          <Match when={route() === "/"}>
-            <Info />
-            <Manage changePage={setRoute} />
-          </Match>
-          <Match when={route() === "/settings"}>
-            <Settings changePage={setRoute} />
-          </Match>
-          <Match when={route() === "/list"}>
-            <List changePage={setRoute} />
-          </Match>
-        </Switch>
+        <RouterCTXProvider>
+          <Header />
+          <Switch>
+            <For each={routes} fallback={<div>Loading...</div>}>
+              {item => (
+                <Match when={routerCtx.getRoute() === item.route}>
+                  {item.element()}
+                </Match>
+              )}
+            </For>
+          </Switch>
+        </RouterCTXProvider>
       </ContextProvider>
-    </>
+    </ErrorBoundary>
   )
 }
 

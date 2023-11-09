@@ -1,3 +1,6 @@
+import { createEffect, createSignal, useContext } from 'solid-js';
+
+// styles
 import './Info.scss'
 
 // icons
@@ -5,28 +8,37 @@ import Conn from '../../assets/smiles/conn.svg';
 import Noc from '../../assets/smiles/noc.svg';
 import Err from '../../assets/smiles/err.svg';
 
-import { createEffect, createSignal, useContext } from 'solid-js';
+// utils
 import { GlobalContext } from '../../context/GlobalContext';
-import { TranspConnection, TranspError } from '../../types/TransportTypes';
 
 export default function Info() {
 
-    const [state, setState] = createSignal<number>(0);
     const info = useContext(GlobalContext);
 
-    type dataType = {
-        connection: null | TranspConnection
-        error: null | TranspError
-    }
-
-    let data: null | dataType = null;
+    const [state, setState] = createSignal<number>(0);
+    const [connectionString, setConnectionString] = createSignal<string>("");
+    const [isCopy, setIsCopy] = createSignal<boolean>(false)
 
     createEffect(() => {
-        data = info.state !== null ? info.state() : null;
-        if (data === null || data.connection === null) { setState(0) }
-        else if (data.connection !== null && data.error === null ) { setState(1) }
+        const data = info.connection();
+        if (data === null || data.connection === null || data.connection.scheme === null) { setState(0) }
+        else if (data.connection !== null && data.error === null ) { 
+            setState(1);
+            setConnectionString(`${data.connection.scheme} | ${data.connection.host}:${data.connection.port}`);
+         }
         else if (data.error !== null ) { setState(2) }
     })
+
+    const copyConnectionString = () => {
+        if (state() === 1) {
+            window.navigator.clipboard.writeText(connectionString());
+
+            setIsCopy(true)
+            setInterval(() => {
+                setIsCopy(false)
+            }, 2000)
+        }
+    }
 
     return (
         <div class="info">
@@ -45,12 +57,18 @@ export default function Info() {
                         {state() === 2 ? "Error" : null}
                     </span>
                 </p>
-                <div class={"info__screen" + " " + `info__screen-${state()}`}>
+                <div 
+                    onClick={copyConnectionString} 
+                    class={"info__screen" + 
+                        " " + `info__screen-${state()}` 
+                        + " " + (isCopy() ? "info__screen-copyed" : null )  }
+                >
                     {state() === 0 ? "wait connection...." : null}
-                    {
-                        //@ts-ignore
-                        state() === 1 ? `${data.connection.scheme} | ${data.connection.host}:${data.connection.port}` : null
-                    }
+                    {state() === 1 ? (
+                        <>
+                            <p>{isCopy() ? "Copied" : connectionString()}</p>
+                        </>
+                    ) : null}
                     {state() === 2 ? `Try to recconnect` : null}
                 </div>
             </div>

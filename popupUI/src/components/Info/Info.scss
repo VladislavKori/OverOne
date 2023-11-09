@@ -69,9 +69,15 @@
         font-weight: 500;
         min-width: 190px;
         width: max-content;
+        transition: background .3s ease-in-out;
 
         &-1 {
             cursor: pointer;
+        }
+
+        &-copyed {
+            width: 218px;
+            background: rgba(41, 255, 152, 0.10);
         }
     }
 }

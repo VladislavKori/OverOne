@@ -1,88 +1,72 @@
-import { Accessor, JSX, createContext, createSignal } from "solid-js";
-import { TranspConnection, TranspError, TranspSettings } from "../types/TransportTypes";
-import { TransportNode } from "../access/Action";
+import { createContext, createSignal } from "solid-js";
 
-export interface IInitialValue {
-    state: Accessor<{
-        connection: null | TranspConnection
-        error: null | TranspError
-    }> | null,
-    settingsStore: Accessor<{
-        bypassList: Array<string>,
-        incognito: boolean
-    }> | null,
-    methods: null | {
-        getStatus: () => void
-        connect: (data: TranspConnection) => void
-        disconnect: () => void
-        resetSettings: () => void
-        getSettings: () => void
-        setSettings: (props: TranspSettings) => void
+// types
+import { TranspSettings } from "../types/TransportTypes";
+import { IConnection, IInitialObject } from "../types/Contexts/GlobalContext";
+
+// utils
+import { TransportNode } from "../utils/Transport";
+import { IContextProvider } from "../types/Context";
+
+// Connection State
+const [connectionState, updateConnectionState] = createSignal<IConnection>({
+    connection: null,
+    error: null,
+})
+
+// Settings State
+const [settingsState, updateSettingsState] = createSignal<TranspSettings>({
+    bypassList: [],
+    incognito: false
+})
+
+// Transport code 
+const transportManager = new TransportNode("hello");
+transportManager.initListener({
+    connectionState,
+    updateConnectionState,
+    settingsState, 
+    updateSettingsState
+})
+
+// Initial object
+const initialValue: IInitialObject = {
+    connection: connectionState,
+    settings: settingsState,
+    methods: {
+        getStatus: () => transportManager.getStatus,
+        connect: (props) => transportManager.connection(props),
+        disconnect: () => transportManager.disconnect(),
+        resetSettings: () => {
+            transportManager.disconnect();
+            updateConnectionState({
+                connection: null,
+                error: null,
+            });
+        },
+        setSettings: (props) => transportManager.setSettings(props),
+        getSettings: () => transportManager.getSettigns()
     }
-}
-
-const initialValue: IInitialValue = {
-    state: null,
-    settingsStore: null,
-    methods: null
 };
 
+// Init context
 const GlobalContext = createContext(initialValue);
 
-interface IContextProvider {
-    children?: JSX.Element
-}
-
 export function ContextProvider(props: IContextProvider) {
-
-    const [state, updateState] = createSignal({
-        connection: null,
-        error: null,
-    })
-
-    const [settingsStore, updateSettings] = createSignal<{
-        bypassList: Array<string>,
-        incognito: boolean
-    }>({
-        bypassList: [],
-        incognito: false
-    })
-
-    // transport code 
-    const transportManager = new TransportNode("hello");
-    transportManager.initListener(state, settingsStore, updateState, updateSettings)
+    
+    // first get status
     transportManager.getStatus()
 
+    // get status every seconds
     setInterval(() => {
         transportManager.getStatus()
     }, 1000)
 
-    let store = {
-        state,
-        settingsStore,
-        methods: {
-            getStatus: transportManager.getStatus,
-            connect: (props: TranspConnection) => transportManager.connection(props),
-            disconnect: () => transportManager.disconnect(),
-            resetSettings: () => {
-                transportManager.disconnect();
-                updateState({
-                    connection: null,
-                    error: null,
-                });
-            },
-            setSettings: (props: TranspSettings) => transportManager.setSettings(props),
-            getSettings: () => transportManager.getSettigns()
-        }
-    }
-
     return (
-        <GlobalContext.Provider value={store}>
+        <GlobalContext.Provider value={initialValue}>
             {props.children}
         </GlobalContext.Provider>
     )
 }
 
-export {
-    GlobalContext
-}
+export { GlobalContext };

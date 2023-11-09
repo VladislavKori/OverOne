@@ -19,3 +19,15 @@ export interface TranspSettings {
     bypassList: Array<string>
     incognito: boolean
 }
+
+export interface IMessage {
+    command: string
+    data: TranspData
+}
+
+export interface IListener {
+    connectionState: Accessor<IConnection>,
+    updateConnectionState: Setter<IConnection>,
+    settingsState: Accessor<TranspSettings>,
+    updateSettingsState: Setter<TranspSettings>
+}

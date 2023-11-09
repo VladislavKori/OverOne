@@ -9,7 +9,7 @@
 
 ## Available for
 - Chrome and (browsers on Chromium)
-- Firfox
+- Firefox
 
 ## Installation
 You need to download the zip file with the source code, then open your browser, go to the extensions section. Then enable developer mode and click "Download unzipped extension". Then you can turn off "developer mode". The extension is ready to work =)

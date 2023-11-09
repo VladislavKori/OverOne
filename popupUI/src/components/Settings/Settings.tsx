@@ -4,10 +4,12 @@ import ReturnIcon from '../../assets/icons/return.svg'
 import Switch from '../Elements/Switch/Switch'
 import { createEffect, createSignal, onMount, useContext } from 'solid-js'
 import { GlobalContext } from '../../context/GlobalContext'
+import { RouterContext } from '../../context/RouterContext'
 
-export default function Settings({ changePage }: { changePage: any }) {
+export default function Settings() {
 
     const data = useContext(GlobalContext);
+    const routerCtx = useContext(RouterContext)
 
     const [allSettingsApply, setAllSettingsApply] = createSignal<boolean>(false);
     const [bypassList, setBypassList] = createSignal<string>("");
@@ -24,10 +26,8 @@ export default function Settings({ changePage }: { changePage: any }) {
     })
 
     createEffect(() => {
-        if (data.settingsStore !== null) {
-            let info = data.settingsStore();
-            updateFileds(info)
-        }
+        let info = data.settings();
+        updateFileds(info)
     })
 
     createEffect(() => {
@@ -52,7 +52,7 @@ export default function Settings({ changePage }: { changePage: any }) {
             <header class="settings__header">
                 <button
                     class="settings__btn-to-previous"
-                    onClick={() => changePage("/")}
+                    onClick={() => routerCtx.setRoute("/")}
                 >
                     <img src={ReturnIcon} alt="return-icon" />
                     <p>Settings</p>
@@ -62,7 +62,7 @@ export default function Settings({ changePage }: { changePage: any }) {
                 <div class="settings__block">
                     <div class="settings__text-block">
                         <h2 class="settings__title">Bypass list</h2>
-                        <h3 class="settings__subtitle">Write sites with запятая</h3>
+                        <h3 class="settings__subtitle">Capitalize the sites</h3>
                     </div>
                     <textarea
                         class="settings__input"
@@ -76,7 +76,7 @@ export default function Settings({ changePage }: { changePage: any }) {
                         value={bypassList()}
                     />
                 </div>
-                
+
                 <div class="settings__block settings__block_horizontal">
                     <div class="settings__text-block">
                         <h2 class="settings__title">Incognito</h2>
