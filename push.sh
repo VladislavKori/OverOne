@@ -5,16 +5,17 @@ cd ../
 command git add .
 command git status
 
-if [$1 == ""]
-then
-    echo "Hello"
-else 
-    echo "Error"
-    exit 0 
+if [[ $1 = "" ]]; then
+  echo "First arg not found"
+  exit
 fi
 
-    # command git commit -m `$1`
-    # echo "commit" + $1
-    # command git log
-    # git push origin $2
-    # echo "Good push"
+if [[ $2 = "" ]]; then
+  echo "Second arg not found"
+  exit
+fi
+
+command git commit -m "$1"
+echo "Commit named $1"
+git push origin "$2"
+echo "Good push into branch - $2"
