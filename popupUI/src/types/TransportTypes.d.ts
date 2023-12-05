@@ -1,4 +1,4 @@
-export type TranspSchema = "socks4" | "socks5" | "https" 
+export type TranspSchema = "socks4" | "socks5" | "https" | "http"
 
 export type TranspConnection = {
     host: string

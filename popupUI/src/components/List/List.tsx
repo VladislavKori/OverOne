@@ -1,24 +1,35 @@
-import { For, useContext } from "solid-js";
+import { For, createResource, useContext } from "solid-js";
 
 import './List.scss'
-
-import proxysList from "./data";
 
 import ReturnIcon from '../../assets/icons/return.svg'
 
 import { GlobalContext } from "../../context/GlobalContext";
 import { RouterContext } from "../../context/RouterContext";
+import { TranspSchema } from "../../types/TransportTypes";
+
+const fetchProxys = async () =>
+    (await fetch(`http://localhost:8080/parsing/getproxys`)).json();
+
 
 export default function List() {
+    const [proxysList] = createResource<Array<{
+        id: number
+        host: string
+        port: number | string
+        schem: TranspSchema
+    }>>(fetchProxys);
 
     const data = useContext(GlobalContext);
     const routerCtx = useContext(RouterContext);
 
     function connectProxy(_data: any) {
         data.methods?.connect({
-            host: _data.ip,
+            host: _data.host,
             port: _data.port,
-            scheme: _data.schema
+            scheme: "http"
+
+            // scheme: _data.schem
         });
         routerCtx.setRoute("/");
     }
@@ -35,24 +46,26 @@ export default function List() {
                 </button>
             </header>
             <ul class="list__proxys">
-            <For each={proxysList}>
-                {(proxy) => (
-                    <button
-                        class="list__button"
-                        onClick={() => connectProxy(proxy)}
-                    >
-                        <div class="list__flag">
+                {proxysList.loading ? <p style={{ color: "#fff" }}>Loading...</p> : (
+                    <For each={proxysList()}>
+                        {(proxy) => (
+                            <button
+                                class="list__button"
+                                onClick={() => connectProxy(proxy)}
+                            >
+                                <div class="list__flag">
 
-                        </div>
-                        <div class="list__info">
-                            <h2 class="list__title">{proxy.country}</h2>
-                            <p class="list__text">
-                                {proxy.schema + " | " + proxy.ip + " | " + proxy.port}
-                            </p>
-                        </div>
-                    </button>
+                                </div>
+                                <div class="list__info">
+                                    <h2 class="list__title">Contry</h2>
+                                    <p class="list__text">
+                                        {proxy.schem + " | " + proxy.host + " | " + proxy.port}
+                                    </p>
+                                </div>
+                            </button>
+                        )}
+                    </For>
                 )}
-            </For>
             </ul>
         </div>
     );
