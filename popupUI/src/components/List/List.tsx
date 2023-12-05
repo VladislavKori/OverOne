@@ -6,19 +6,12 @@ import ReturnIcon from '../../assets/icons/return.svg'
 
 import { GlobalContext } from "../../context/GlobalContext";
 import { RouterContext } from "../../context/RouterContext";
-import { TranspConnection, TranspSchema } from "../../types/TransportTypes";
+import { TranspConnection } from "../../types/TransportTypes";
 
 const fetchProxys = async () =>
     (await fetch(`https://gitlab.com/VladislavKori/proxyslist/-/raw/main/proxys.json`)).json();
 
 export default function List() {
-    const [proxysList] = createResource<Array<{
-        id: number
-        host: string
-        port: number | string
-        schem: TranspSchema
-    }>>(fetchProxys);
-
     const data = useContext(GlobalContext);
     const routerCtx = useContext(RouterContext);
 

@@ -22,11 +22,11 @@ export default function Info() {
     createEffect(() => {
         const data = info.connection();
         if (data === null || data.connection === null || data.connection.scheme === null) { setState(0) }
-        else if (data.connection !== null && data.error === null ) { 
+        else if (data.connection !== null && data.error === null) {
             startTesting()
             setConnectionString(`${data.connection.scheme} | ${data.connection.host}:${data.connection.port}`);
-         }
-        else if (data.error !== null ) { setState(2) }
+        }
+        else if (data.error !== null) { setState(2) }
     })
 
     const copyConnectionString = () => {
@@ -44,17 +44,19 @@ export default function Info() {
         if (state() === 2) return null;
         setState(3);
         const resp = await fetchToGoogle()
-        if (resp.ok) {
+        if (resp !== undefined && resp.ok) {
             setState(1)
-        } else {
-            setState(2)
         }
     }
 
     const fetchToGoogle = async () => {
-        return await fetch("https://google.com", {
-            mode: "no-cors"
-        })
+        try {
+            return await fetch("https://google.com", {
+                mode: "no-cors"
+            })
+        } catch (err) {
+            setState(2)
+        }
     }
 
     return (
@@ -76,11 +78,11 @@ export default function Info() {
                         {state() === 3 ? "Loading" : null}
                     </span>
                 </p>
-                <div 
-                    onClick={copyConnectionString} 
-                    class={"info__screen" + 
-                        " " + `info__screen-${state()}` 
-                        + " " + (isCopy() ? "info__screen-copyed" : null )  }
+                <div
+                    onClick={copyConnectionString}
+                    class={"info__screen" +
+                        " " + `info__screen-${state()}`
+                        + " " + (isCopy() ? "info__screen-copyed" : null)}
                 >
                     {state() === 0 ? "wait connection...." : null}
                     {state() === 1 ? (

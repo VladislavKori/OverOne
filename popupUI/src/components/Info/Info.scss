@@ -39,6 +39,7 @@
         }
 
         &-state3 {
+            animation: rotate 1s infinite linear;
             background: linear-gradient(180deg, #8E8920 16.81%, #7A5620 81.91%);
         }
     }
@@ -83,5 +84,15 @@
             width: 218px;
             background: rgba(41, 255, 152, 0.10);
         }
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
     }
 }
