@@ -23,7 +23,7 @@ export default function Info() {
         const data = info.connection();
         if (data === null || data.connection === null || data.connection.scheme === null) { setState(0) }
         else if (data.connection !== null && data.error === null ) { 
-            setState(1);
+            startTesting()
             setConnectionString(`${data.connection.scheme} | ${data.connection.host}:${data.connection.port}`);
          }
         else if (data.error !== null ) { setState(2) }
@@ -40,6 +40,23 @@ export default function Info() {
         }
     }
 
+    const startTesting = async () => {
+        if (state() === 2) return null;
+        setState(3);
+        const resp = await fetchToGoogle()
+        if (resp.ok) {
+            setState(1)
+        } else {
+            setState(2)
+        }
+    }
+
+    const fetchToGoogle = async () => {
+        return await fetch("https://google.com", {
+            mode: "no-cors"
+        })
+    }
+
     return (
         <div class="info">
             <div class={"info__circle" + " " + `info__circle-state${state()}`}>
@@ -47,6 +64,7 @@ export default function Info() {
                     {state() === 0 ? <img src={Noc} /> : null}
                     {state() === 1 ? <img src={Conn} /> : null}
                     {state() === 2 ? <img src={Err} /> : null}
+                    {state() === 3 ? <img src={Noc} /> : null}
                 </div>
             </div>
             <div class="info__status">
@@ -55,6 +73,7 @@ export default function Info() {
                         {state() === 0 ? "No Connected" : null}
                         {state() === 1 ? "Connected" : null}
                         {state() === 2 ? "Error" : null}
+                        {state() === 3 ? "Loading" : null}
                     </span>
                 </p>
                 <div 
@@ -70,6 +89,7 @@ export default function Info() {
                         </>
                     ) : null}
                     {state() === 2 ? `Try to recconnect` : null}
+                    {state() === 3 ? `Loading` : null}
                 </div>
             </div>
         </div>

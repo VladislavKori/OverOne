@@ -6,11 +6,10 @@ import ReturnIcon from '../../assets/icons/return.svg'
 
 import { GlobalContext } from "../../context/GlobalContext";
 import { RouterContext } from "../../context/RouterContext";
-import { TranspSchema } from "../../types/TransportTypes";
+import { TranspConnection, TranspSchema } from "../../types/TransportTypes";
 
 const fetchProxys = async () =>
-    (await fetch(`http://localhost:8080/parsing/getproxys`)).json();
-
+    (await fetch(`https://gitlab.com/VladislavKori/proxyslist/-/raw/main/proxys.json`)).json();
 
 export default function List() {
     const [proxysList] = createResource<Array<{
@@ -23,13 +22,13 @@ export default function List() {
     const data = useContext(GlobalContext);
     const routerCtx = useContext(RouterContext);
 
+    const [proxys] = createResource<Array<TranspConnection>>(fetchProxys);
+
     function connectProxy(_data: any) {
         data.methods?.connect({
             host: _data.host,
             port: _data.port,
-            scheme: "http"
-
-            // scheme: _data.schem
+            scheme: _data.scheme
         });
         routerCtx.setRoute("/");
     }
@@ -45,28 +44,32 @@ export default function List() {
                     <p>List</p>
                 </button>
             </header>
-            <ul class="list__proxys">
-                {proxysList.loading ? <p style={{ color: "#fff" }}>Loading...</p> : (
-                    <For each={proxysList()}>
-                        {(proxy) => (
-                            <button
-                                class="list__button"
-                                onClick={() => connectProxy(proxy)}
-                            >
-                                <div class="list__flag">
+            <main class="list__content">
+                {proxys.loading ? (
+                    <p class="list__loading">Loading...</p>
+                ) : (
+                    <ul class="list__proxys">
+                        <For each={proxys()}>
+                            {(proxy) => (
+                                <button
+                                    class="list__button"
+                                    onClick={() => connectProxy(proxy)}
+                                >
+                                    <div class="list__flag">
 
-                                </div>
-                                <div class="list__info">
-                                    <h2 class="list__title">Contry</h2>
-                                    <p class="list__text">
-                                        {proxy.schem + " | " + proxy.host + " | " + proxy.port}
-                                    </p>
-                                </div>
-                            </button>
-                        )}
-                    </For>
+                                    </div>
+                                    <div class="list__info">
+                                        <h2 class="list__title">Country None</h2>
+                                        <p class="list__text">
+                                            {proxy.scheme + " | " + proxy.host + " | " + proxy.port}
+                                        </p>
+                                    </div>
+                                </button>
+                            )}
+                        </For>
+                    </ul>
                 )}
-            </ul>
+            </main>
         </div>
     );
 };
