@@ -10,6 +10,11 @@
         padding-bottom: 10px;
     }
 
+    &__loading {
+        color: #fff;
+        font-size: 14px;
+    }
+
     &__btn-to-previous {
         background: transparent;
         border: none;
@@ -34,9 +39,23 @@
         }
     }
 
-    &__proxys {
+    &__content {
         flex: 1;
-        padding-bottom: 15px;
+        margin-bottom: 15px;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__proxys {
+        display: flex;
+        flex-direction: column;
+        row-gap: 12px;
+        overflow-y: auto;
+        height: 100%;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 
     &__button {
@@ -62,7 +81,7 @@
         width: 58px;
         height: 35px;
         border-radius: 4px;
-        background: #D9D9D9;
+        background: linear-gradient(75deg, #373737, #FFF);
     }
 
     &__info {

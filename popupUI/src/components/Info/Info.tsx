@@ -52,7 +52,9 @@ export default function Info() {
     }
 
     const fetchToGoogle = async () => {
-        return await fetch("https://google.com")
+        return await fetch("https://google.com", {
+            mode: "no-cors"
+        })
     }
 
     return (
