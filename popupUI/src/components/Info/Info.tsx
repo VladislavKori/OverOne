@@ -23,6 +23,7 @@ export default function Info() {
         const data = info.connection();
         if (data === null || data.connection === null || data.connection.scheme === null) { setState(0) }
         else if (data.connection !== null && data.error === null) {
+            console.log('call')
             startTesting()
             setConnectionString(`${data.connection.scheme} | ${data.connection.host}:${data.connection.port}`);
         }

@@ -1,0 +1,88 @@
+.form {
+    padding: 0 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+    z-index: 2;
+
+    &__header {
+        border-bottom: 1px solid #fff;
+        padding-bottom: 10px;
+    }
+
+    &__btn-to-previous {
+        background: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+
+        cursor: pointer;
+
+        & img {
+            width: 6px;
+            height: 10px;
+        }
+
+        & p {
+            color: #FFF;
+            font-family: var(--default-font);
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+        }
+    }
+
+    &__input-block {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    &__label {
+        color: #fff;
+        font-family: var(--default-font);
+        font-size: 14px;
+    }
+
+    &__input {
+        border-radius: 7px;
+        background: #1C1E2C;
+        box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.25);
+        border: none;
+        padding: 10px 8px;
+        outline: none;
+        color: #fff;
+        color: #EFEFEF;
+
+        font-family: var(--default-font);
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    &__button {
+        width: 100%;
+        border-radius: 7px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.10);
+
+        color: #FFF;
+        font-family: var(--default-font);
+        padding: 8px 25px;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+
+        cursor: pointer;
+        transition: background .3s ease-in-out;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.20);
+        }
+    }
+}

@@ -15,6 +15,7 @@ import { ProxysList } from './pages/ProxysList';
 import { ContextProvider } from './context/GlobalContext'
 import { RouterCTXProvider, RouterContext } from './context/RouterContext'
 import ErrorBoundaryHandler from './components/Error/Error';
+import { ProxysForm } from './pages/ProxyForm';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
     { route: "/", element: Home },
     { route: "/settings", element: Settings },
     { route: "/list", element: ProxysList },
+    { route: "/form", element: ProxysForm }
   ]
 
   return (

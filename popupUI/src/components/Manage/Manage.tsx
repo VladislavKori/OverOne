@@ -15,14 +15,14 @@ export default function Manage() {
     const [isOpen, setIsOpen] = createSignal<boolean>(false);
 
     const modalHandler = () => {
-        switch(state()) {
-            case 0: 
+        switch (state()) {
+            case 0:
                 setIsOpen(!isOpen());
                 break;
-            case 1: 
+            case 1:
                 info.methods.disconnect()
                 break;
-            case 2: 
+            case 2:
                 info.methods.resetSettings()
                 break;
         }
@@ -50,7 +50,7 @@ export default function Manage() {
             <Modal
                 isOpen={isOpen}
                 closeModal={() => setIsOpen(false)}
-                changePage={() => routerCtx.setRoute("/list")}
+                changePage={routerCtx.setRoute}
             />
         </>
     )
